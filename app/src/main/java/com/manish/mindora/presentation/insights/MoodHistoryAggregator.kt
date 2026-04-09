@@ -4,10 +4,6 @@ import com.manish.mindora.domain.model.JournalEntry
 import java.util.Calendar
 import java.util.Locale
 
-/**
- * Builds the last [dayCount] local calendar days. For each day, the **last entry of that day** wins
- * (per product spec).
- */
 object MoodHistoryAggregator {
 
     fun lastEntryPerDay(

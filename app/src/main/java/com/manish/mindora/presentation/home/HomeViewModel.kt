@@ -3,6 +3,7 @@ package com.manish.mindora.presentation.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.manish.mindora.R
+import com.manish.mindora.data.local.UserLocalPreferences
 import com.manish.mindora.domain.model.JournalEntry
 import com.manish.mindora.domain.model.Mood
 import com.manish.mindora.domain.repository.JournalRepository
@@ -11,7 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -22,26 +23,30 @@ data class HomeUiState(
     val greetingResId: Int = R.string.greeting_default,
     val todayEntry: JournalEntry? = null,
     val isLoading: Boolean = true,
+    val userDisplayName: String = "",
 )
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val journalRepository: JournalRepository,
+    userPreferences: UserLocalPreferences,
 ) : ViewModel() {
 
-    val uiState: StateFlow<HomeUiState> = journalRepository.observeEntries()
-        .map { entries ->
-            HomeUiState(
-                greetingResId = greetingForHour(),
-                todayEntry = entries.latestToday(),
-                isLoading = false,
-            )
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Eagerly,
-            initialValue = HomeUiState(isLoading = true),
+    val uiState: StateFlow<HomeUiState> = combine(
+        journalRepository.observeEntries(),
+        userPreferences.displayName,
+    ) { entries, name ->
+        HomeUiState(
+            greetingResId = greetingForHour(),
+            todayEntry = entries.latestToday(),
+            isLoading = false,
+            userDisplayName = name,
         )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = HomeUiState(isLoading = true),
+    )
 
     private val _quickMoodSaving = MutableStateFlow<Mood?>(null)
     val quickMoodSaving: StateFlow<Mood?> = _quickMoodSaving.asStateFlow()

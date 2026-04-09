@@ -10,7 +10,5 @@ interface JournalRepository {
     suspend fun saveEntryWithAnalysis(
         text: String,
     ): Result<JournalEntry>
-
-    /** Saves a short check-in with an explicit mood (no remote sentiment call). */
     suspend fun saveQuickMood(mood: Mood): Result<JournalEntry>
 }

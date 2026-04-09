@@ -5,8 +5,13 @@
     <string name="greeting_afternoon">Good afternoon</string>
     <string name="greeting_evening">Good evening</string>
     <string name="greeting_default">Hello</string>
-    <string name="default_user_first_name">Arjun</string>
+    <string name="home_display_name_fallback">there</string>
     <string name="home_hey_user">Hey, %1$s</string>
+
+    <string name="name_setup_title">What should we call you?</string>
+    <string name="name_setup_subtitle">We\'ll show it in your Home greeting. It stays on this device only.</string>
+    <string name="name_setup_label">First name or nickname</string>
+    <string name="name_setup_continue">Continue</string>
     <string name="home_avatar_content_description">Your profile initial</string>
 
     <string name="home_today_mood_heading">Today\'s mood</string>
@@ -38,6 +43,14 @@
     <string name="nav_insights">Insights</string>
     <string name="nav_ai">AI</string>
 
+    <string name="settings_title">Settings</string>
+    <string name="settings_back">Back</string>
+    <string name="settings_open_content_description">Open settings</string>
+    <string name="settings_theme_section">Appearance</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_system">Use device setting</string>
+
     <string name="journal_header_primary">Today\'s Journal</string>
     <string name="journal_title">Journal</string>
     <string name="journal_intro_title">Private reflection</string>
@@ -53,6 +66,12 @@
     <string name="journal_tag_tired">Tired</string>
     <string name="journal_word_limit_error">Please keep your entry at or under %1$d words.</string>
     <string name="journal_save_error_generic">Could not save your entry. Please try again.</string>
+    <string name="journal_past_entries_hint">Tap a card to read the full entry.</string>
+    <string name="journal_read_title">Journal entry</string>
+    <string name="journal_read_entry_label">What you wrote</string>
+    <string name="journal_read_support_label">Supportive note</string>
+    <string name="journal_read_confidence">Confidence %1$d%%</string>
+    <string name="journal_read_close">Close</string>
 
     <string name="insights_title">Insights</string>
     <string name="insights_date_range_format">%1$s – %2$s</string>

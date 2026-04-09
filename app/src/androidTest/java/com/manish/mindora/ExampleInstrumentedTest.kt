@@ -9,9 +9,8 @@ import org.junit.runner.RunWith
 import org.junit.Assert.*
 
 /**
- * Instrumented test, which will execute on an Android device.
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * Smoke check for the instrumented test process. UI flows live in
+ * [MindoraEndToEndInstrumentedTest] (Compose + Espresso).
  */
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {

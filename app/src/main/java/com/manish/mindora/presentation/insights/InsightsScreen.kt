@@ -1,11 +1,13 @@
 package com.manish.mindora.presentation.insights
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,18 +19,25 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -38,6 +47,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.manish.mindora.R
 import com.manish.mindora.domain.model.JournalEntry
 import com.manish.mindora.domain.model.Mood
+import com.manish.mindora.presentation.components.JournalEntryReadContent
+import com.manish.mindora.presentation.components.entryMoodLabelRes
 import com.manish.mindora.ui.theme.MindoraMoodChart
 import com.manish.mindora.ui.theme.MindoraPalette
 import java.text.SimpleDateFormat
@@ -45,20 +56,30 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InsightsScreen(
     modifier: Modifier = Modifier,
     viewModel: InsightsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    var selectedEntryId by rememberSaveable { mutableStateOf<String?>(null) }
+    val selectedEntry = remember(selectedEntryId, state.recentEntries) {
+        selectedEntryId?.let { id -> state.recentEntries.firstOrNull { it.id == id } }
+    }
     val entryTimeFormat = remember { SimpleDateFormat("MMM d, HH:mm", Locale.getDefault()) }
+    val entryDetailTimeFormat = remember {
+        SimpleDateFormat("EEE, MMM d, yyyy • h:mm a", Locale.getDefault())
+    }
+    val readSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    LazyColumn(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
+    Box(modifier = modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
         item {
             InsightsHeader(weekRangeLabel = state.weekRangeLabel)
         }
@@ -165,6 +186,14 @@ fun InsightsScreen(
                 modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
             )
             HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.35f))
+            if (state.recentEntries.isNotEmpty()) {
+                Text(
+                    text = stringResource(R.string.journal_past_entries_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 8.dp),
+                )
+            }
         }
 
         if (state.recentEntries.isEmpty() && !state.isLoading) {
@@ -188,9 +217,28 @@ fun InsightsScreen(
             }
         } else {
             items(state.recentEntries, key = { it.id }) { entry ->
-                JournalEntryRow(entry = entry, timeFormat = entryTimeFormat)
+                JournalEntryRow(
+                    entry = entry,
+                    timeFormat = entryTimeFormat,
+                    onOpen = { selectedEntryId = entry.id },
+                )
             }
             item { Spacer(modifier = Modifier.height(24.dp)) }
+        }
+        }
+
+        val openEntry = selectedEntry
+        if (openEntry != null) {
+            ModalBottomSheet(
+                onDismissRequest = { selectedEntryId = null },
+                sheetState = readSheetState,
+            ) {
+                JournalEntryReadContent(
+                    entry = openEntry,
+                    detailTimeFormat = entryDetailTimeFormat,
+                    onClose = { selectedEntryId = null },
+                )
+            }
         }
     }
 }
@@ -391,11 +439,13 @@ private fun SpotlightCard() {
 private fun JournalEntryRow(
     entry: JournalEntry,
     timeFormat: SimpleDateFormat,
+    onOpen: () -> Unit,
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp),
+            .padding(vertical = 6.dp)
+            .clickable(role = Role.Button, onClick = onOpen),
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
@@ -411,7 +461,7 @@ private fun JournalEntryRow(
                     color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.7f),
                 ) {
                     Text(
-                        text = moodString(entry.mood),
+                        text = stringResource(entryMoodLabelRes(entry.mood)),
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -431,24 +481,16 @@ private fun JournalEntryRow(
                 overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colorScheme.onSurface,
             )
-            Text(
-                text = entry.feedback,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.primary,
-            )
+            if (entry.feedback.isNotBlank()) {
+                Text(
+                    text = entry.feedback,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            }
         }
     }
 }
-
-@Composable
-private fun moodString(mood: Mood): String = stringResource(
-    when (mood) {
-        Mood.Happy -> R.string.mood_happy
-        Mood.Sad -> R.string.mood_sad
-        Mood.Angry -> R.string.mood_angry
-        Mood.Neutral -> R.string.mood_neutral
-    },
-)
 
 private fun dayLetter(millis: Long): String {
     val cal = Calendar.getInstance()

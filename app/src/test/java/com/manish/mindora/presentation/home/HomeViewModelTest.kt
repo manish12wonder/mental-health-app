@@ -4,6 +4,7 @@ import com.manish.mindora.MainDispatcherRule
 import com.manish.mindora.domain.model.JournalEntry
 import com.manish.mindora.domain.model.Mood
 import com.manish.mindora.fakes.FakeJournalRepository
+import com.manish.mindora.fakes.FakeUserLocalPreferences
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -38,7 +39,8 @@ class HomeViewModelTest {
             feedback = "Nice",
         )
         val fake = FakeJournalRepository(listOf(entry))
-        val vm = HomeViewModel(fake)
+        val prefs = FakeUserLocalPreferences()
+        val vm = HomeViewModel(fake, prefs)
         advanceUntilIdle()
         val state = vm.uiState.value
         assertNotNull(state.todayEntry)

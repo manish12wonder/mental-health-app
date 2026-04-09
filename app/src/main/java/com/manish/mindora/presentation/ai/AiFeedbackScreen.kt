@@ -67,7 +67,7 @@ fun AiFeedbackScreen(
                 text = stringResource(R.string.ai_feedback_title),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                color = MindoraPalette.TextPrimary,
+                color = MindoraPalette.SurfaceBluishWhite,
             )
             Surface(
                 shape = CircleShape,
@@ -200,7 +200,7 @@ fun AiFeedbackScreen(
                             Text(
                                 text = entry.feedback,
                                 style = MaterialTheme.typography.bodyLarge,
-                                color = MindoraPalette.TextPrimary,
+                                color = MindoraPalette.SurfaceBluishWhite,
                             )
                         }
                     }

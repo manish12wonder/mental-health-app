@@ -1,11 +1,11 @@
 package com.manish.mindora.di
 
 import com.manish.mindora.data.feedback.AndroidFeedbackMessageProvider
-import com.manish.mindora.data.repository.FirebaseAuthRepository
+import com.manish.mindora.data.local.UserLocalPreferences
+import com.manish.mindora.data.local.UserPreferencesRepository
 import com.manish.mindora.data.repository.JournalRepositoryImpl
 import com.manish.mindora.data.sentiment.CompositeSentimentAnalyzer
 import com.manish.mindora.domain.feedback.FeedbackMessageProvider
-import com.manish.mindora.domain.repository.AuthRepository
 import com.manish.mindora.domain.repository.JournalRepository
 import com.manish.mindora.domain.sentiment.SentimentAnalyzer
 import dagger.Binds
@@ -24,7 +24,7 @@ abstract class BindingsModule {
 
     @Binds
     @Singleton
-    abstract fun bindAuthRepository(impl: FirebaseAuthRepository): AuthRepository
+    abstract fun bindUserLocalPreferences(impl: UserPreferencesRepository): UserLocalPreferences
 
     @Binds
     @Singleton

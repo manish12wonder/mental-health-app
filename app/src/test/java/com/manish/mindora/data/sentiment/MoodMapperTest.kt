@@ -9,7 +9,7 @@ import org.junit.Test
 /**
  * Manual QA checklist (MVP):
  * - Fresh install: disclaimer blocks the rest of the app until acknowledged.
- * - After acknowledge: anonymous sign-in; saving a journal entry writes to Firestore under users/{uid}/entries.
+ * - After acknowledge: saving a journal entry persists to the local Room database.
  * - With SENTIMENT_API_KEY unset: keyword-based mood and string feedback still work.
  * - With a valid Hugging Face token in local.properties: online analysis is used when the network succeeds.
  * - Airplane mode or HF errors: entry still saves; mood falls back to keyword heuristic.

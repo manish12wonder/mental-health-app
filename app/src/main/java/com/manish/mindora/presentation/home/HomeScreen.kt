@@ -22,11 +22,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.EditNote
 import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -53,12 +55,14 @@ import com.manish.mindora.ui.theme.MindoraPalette
 fun HomeScreen(
     modifier: Modifier = Modifier,
     onOpenJournal: () -> Unit = {},
+    onOpenSettings: () -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val savingMood by viewModel.quickMoodSaving.collectAsStateWithLifecycle()
     val scroll = rememberScrollState()
-    val userName = stringResource(R.string.default_user_first_name)
+    val fallbackName = stringResource(R.string.home_display_name_fallback)
+    val userName = state.userDisplayName.ifBlank { fallbackName }
     val initials = remember(userName) {
         userName.trim().take(2).uppercase()
     }
@@ -75,6 +79,7 @@ fun HomeScreen(
             greetingResId = state.greetingResId,
             userName = userName,
             initials = initials,
+            onOpenSettings = onOpenSettings,
         )
 
         when {
@@ -137,38 +142,54 @@ private fun HomeTopBar(
     greetingResId: Int,
     userName: String,
     initials: String,
+    onOpenSettings: () -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
             Text(
                 text = stringResource(greetingResId),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                color = MindoraPalette.TextPrimary,
+                color = MaterialTheme.colorScheme.onBackground,
             )
             Text(
                 text = stringResource(R.string.home_hey_user, userName),
                 style = MaterialTheme.typography.titleMedium,
-                color = MindoraPalette.TextSecondary,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-        Surface(
-            shape = CircleShape,
-            color = MaterialTheme.colorScheme.secondaryContainer,
-            modifier = Modifier.size(48.dp),
-            tonalElevation = 2.dp,
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                Text(
-                    text = initials,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+            IconButton(onClick = onOpenSettings) {
+                Icon(
+                    imageVector = Icons.Outlined.Settings,
+                    contentDescription = stringResource(R.string.settings_open_content_description),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+            }
+            Surface(
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                modifier = Modifier.size(48.dp),
+                tonalElevation = 2.dp,
+            ) {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                    Text(
+                        text = initials,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    )
+                }
             }
         }
     }
@@ -258,7 +279,7 @@ private fun MoodPickerCard(
                 text = stringResource(R.string.home_mood_prompt_title),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = MindoraPalette.TextPrimary,
+                color = MindoraPalette.SurfaceBluishWhite,
             )
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Row(
@@ -357,7 +378,7 @@ private fun MoodPickTile(
                         text = label,
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.Medium,
-                        color = MindoraPalette.TextPrimary,
+                        color = Color.White,
                         textAlign = TextAlign.Center,
                     )
                 }

@@ -1,8 +1,6 @@
 package com.manish.mindora.presentation.journal
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +10,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AutoStories
 import androidx.compose.material3.Button
@@ -41,6 +41,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
@@ -65,6 +66,7 @@ fun JournalScreen(
 ) {
     var text by rememberSaveable { mutableStateOf("") }
     val saveUiState by viewModel.saveUiState.collectAsStateWithLifecycle()
+
     val snackbarHostState = remember { SnackbarHostState() }
     val genericError = stringResource(R.string.journal_save_error_generic)
     val wordLimitTemplate = stringResource(R.string.journal_word_limit_error, JournalViewModel.MAX_WORDS)
@@ -81,6 +83,7 @@ fun JournalScreen(
         SimpleDateFormat("EEE, MMM d", Locale.getDefault()).format(Date())
     }
     val wordCount = remember(text) { countWords(text) }
+    val scroll = rememberScrollState()
 
     LaunchedEffect(saveUiState) {
         when (val s = saveUiState) {
@@ -111,6 +114,7 @@ fun JournalScreen(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
+                .verticalScroll(scroll)
                 .padding(horizontal = 20.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
@@ -169,16 +173,14 @@ fun JournalScreen(
             }
 
             Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
+                modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
             ) {
                 Column(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxWidth()
                         .padding(12.dp),
                 ) {
                     if (saveUiState is JournalSaveUiState.Saving) {
@@ -204,13 +206,14 @@ fun JournalScreen(
                         }
                     }
 
-                    OutlinedTextField(
-                        value = text,
-                        onValueChange = { text = it },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .drawBehind {
+                            OutlinedTextField(
+                                value = text,
+                                onValueChange = { text = it },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(280.dp)
+                                    .testTag("journal_body_input")
+                                    .drawBehind {
                                 val lineHeight = 44.dp.toPx()
                                 var y = lineHeight
                                 val lineColor = MindoraPalette.Divider.copy(alpha = 0.35f)
@@ -224,7 +227,8 @@ fun JournalScreen(
                                     y += lineHeight
                                 }
                             },
-                        minLines = 12,
+                        minLines = 10,
+                        maxLines = 14,
                         shape = RoundedCornerShape(16.dp),
                         placeholder = { Text(stringResource(R.string.journal_placeholder)) },
                         colors = OutlinedTextFieldDefaults.colors(
@@ -254,7 +258,8 @@ fun JournalScreen(
                 enabled = saveUiState !is JournalSaveUiState.Saving && text.isNotBlank(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(54.dp),
+                    .height(54.dp)
+                    .testTag("journal_save_button"),
                 shape = RoundedCornerShape(14.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MindoraSaveGreen,
@@ -282,6 +287,7 @@ fun JournalScreen(
                     )
                 }
             }
+
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
