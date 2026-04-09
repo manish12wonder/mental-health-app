@@ -1,0 +1,122 @@
+<resources>
+    <string name="app_name">Mindora</string>
+
+    <string name="greeting_morning">Good morning</string>
+    <string name="greeting_afternoon">Good afternoon</string>
+    <string name="greeting_evening">Good evening</string>
+    <string name="greeting_default">Hello</string>
+    <string name="default_user_first_name">Arjun</string>
+    <string name="home_hey_user">Hey, %1$s</string>
+    <string name="home_avatar_content_description">Your profile initial</string>
+
+    <string name="home_today_mood_heading">Today\'s mood</string>
+    <string name="home_today_mood_empty">No check-in yet today. Pick how you feel below or write in Journal.</string>
+    <string name="home_confidence_short">Confidence %1$d%%</string>
+    <string name="home_mood_prompt_title">How are you feeling right now?</string>
+    <string name="home_quick_mood_saving">Saving…</string>
+
+    <string name="mood_display_peaceful">Peaceful</string>
+    <string name="mood_display_sad">Sad</string>
+    <string name="mood_display_anxious">Anxious</string>
+    <string name="mood_display_neutral">Neutral</string>
+
+    <string name="mood_emoji_peaceful">😌</string>
+    <string name="mood_emoji_sad">😔</string>
+    <string name="mood_emoji_anxious">😰</string>
+    <string name="mood_emoji_neutral">😐</string>
+
+    <string name="home_brand_name">Mindora</string>
+    <string name="home_brand_tagline">A calm space for your mood and thoughts.</string>
+    <string name="home_prompt">How are you feeling today?</string>
+    <string name="home_no_entry_today">You have not journaled yet today. A few honest lines are enough to start.</string>
+    <string name="home_cta_journal">Write today\'s entry</string>
+    <string name="home_today_mood_title">Today\'s reflection</string>
+    <string name="home_confidence_format">Confidence: %1$d%%</string>
+
+    <string name="nav_home">Home</string>
+    <string name="nav_journal">Journal</string>
+    <string name="nav_insights">Insights</string>
+    <string name="nav_ai">AI</string>
+
+    <string name="journal_header_primary">Today\'s Journal</string>
+    <string name="journal_title">Journal</string>
+    <string name="journal_intro_title">Private reflection</string>
+    <string name="journal_intro_subtitle">There is no wrong way to journal. Short notes count. Your words stay on your account.</string>
+    <string name="journal_hint">Write freely. Your entry is saved privately and analyzed only to suggest a supportive note.</string>
+    <string name="journal_placeholder">What is on your mind?</string>
+    <string name="journal_submit">Save &amp; Analyze</string>
+    <string name="journal_char_count_format">%1$d characters</string>
+    <string name="journal_word_count_format">%1$d / %2$d words</string>
+    <string name="journal_ai_analyzing">AI is reading your mood…</string>
+    <string name="journal_tag_reflective">Reflective</string>
+    <string name="journal_tag_grateful">Grateful</string>
+    <string name="journal_tag_tired">Tired</string>
+    <string name="journal_word_limit_error">Please keep your entry at or under %1$d words.</string>
+    <string name="journal_save_error_generic">Could not save your entry. Please try again.</string>
+
+    <string name="insights_title">Insights</string>
+    <string name="insights_date_range_format">%1$s – %2$s</string>
+    <string name="insights_journaled_title">Journaled</string>
+    <string name="insights_journaled_subtitle">%1$d days this week</string>
+    <string name="insights_top_mood_title">Top mood</string>
+    <string name="insights_top_mood_none">Not enough data yet</string>
+    <string name="insights_top_mood_calm">Calm &amp; happy</string>
+    <string name="insights_weekly_trend">Weekly mood trend</string>
+    <string name="insights_weekly_title">Weekly mood</string>
+    <string name="insights_weekly_rule">Each bar uses the last journal entry of that calendar day on this device.</string>
+    <string name="insights_summary_title">This week</string>
+    <string name="insights_days_logged">Days with a mood</string>
+    <string name="insights_entries_logged">Entries</string>
+    <string name="insights_chart_hint">Add a journal entry any day to fill in the chart.</string>
+    <string name="insights_legend_title">Mood colors</string>
+    <string name="insights_legend_anxious">Anxious</string>
+    <string name="insights_recent_title">Recent entries</string>
+    <string name="insights_no_entries">No journal entries yet.</string>
+    <string name="insights_spotlight_title">Morning mood boost</string>
+    <string name="insights_spotlight_body">Try a 2-minute breathing pause before you check your phone tomorrow.</string>
+    <string name="insights_spotlight_stat">+12%</string>
+
+    <string name="ai_feedback_title">AI Companion</string>
+    <string name="ai_feedback_empty_title">No analysis yet</string>
+    <string name="ai_feedback_empty_body">Save a journal entry to see your latest mood insight here.</string>
+    <string name="ai_feedback_detected_from">Detected from your journal</string>
+    <string name="ai_feedback_confidence_format">%1$d%%</string>
+    <string name="ai_feedback_mindful_title">Mindful response</string>
+
+    <string name="mood_headline_peaceful">Feeling peaceful</string>
+    <string name="mood_headline_sad">Feeling sad</string>
+    <string name="mood_headline_anxious">Feeling anxious</string>
+    <string name="mood_headline_neutral">Feeling neutral</string>
+
+    <string name="mood_happy">Happy</string>
+    <string name="mood_sad">Sad</string>
+    <string name="mood_angry">Angry</string>
+    <string name="mood_neutral">Neutral</string>
+
+    <string name="disclaimer_title">Important</string>
+    <string name="disclaimer_body">Mindora is not a medical device and does not provide diagnosis or treatment. It is a self-care journaling companion.\n\nIf you feel overwhelmed, unsafe, or in crisis, contact a qualified professional or local emergency services.\n\nBy continuing, you acknowledge this information.</string>
+    <string name="disclaimer_acknowledge">I understand</string>
+
+    <string name="crisis_line_hint">If you are in immediate danger, contact emergency services in your region.</string>
+
+    <string-array name="feedback_happy">
+        <item>It sounds like something lifted you today. Savor small wins—they add up.</item>
+        <item>Glad you shared this. Keep doing what helps you feel steady and kind to yourself.</item>
+        <item>Your words carry warmth. Consider one thing you are grateful for before you close the app.</item>
+    </string-array>
+    <string-array name="feedback_sad">
+        <item>Thank you for trusting this space. Be gentle with yourself today; even rest is productive.</item>
+        <item>Heavy days are hard. A short walk, water, or a few slow breaths can be a small step forward.</item>
+        <item>It is okay to feel low. If it persists or feels too heavy, reaching out to someone you trust can help.</item>
+    </string-array>
+    <string-array name="feedback_angry">
+        <item>Anger often signals a boundary or need. When you can, name what felt unfair without judging yourself.</item>
+        <item>Your feelings are valid. Try a brief pause—inhale four counts, exhale six—before you decide your next step.</item>
+        <item>It is fine to step away from what is frustrating you. A change of scene can create room to think.</item>
+    </string-array>
+    <string-array name="feedback_neutral">
+        <item>Thanks for checking in. A tiny intention for the rest of the day can still matter.</item>
+        <item>Neutral days are part of the rhythm. Notice one small detail around you that feels okay.</item>
+        <item>Showing up to reflect is already a healthy habit. Keep going at your own pace.</item>
+    </string-array>
+</resources>
